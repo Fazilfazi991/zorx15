@@ -32,6 +32,15 @@ const SEO = () => {
                         { value: "47", label: "Industries", icon: Users },
                         { value: "312%", label: "Avg ROI", icon: TrendingUp }
                     ]}
+                    logos={[
+                        "https://logo.clearbit.com/google.com",
+                        "https://logo.clearbit.com/shopify.com",
+                        "https://logo.clearbit.com/hubspot.com",
+                        "https://logo.clearbit.com/salesforce.com",
+                        "https://logo.clearbit.com/monday.com",
+                        "https://logo.clearbit.com/intercom.com",
+                        "https://logo.clearbit.com/zendesk.com"
+                    ]}
                 />
 
                 <BrutalTruth

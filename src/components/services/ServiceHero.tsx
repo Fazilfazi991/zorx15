@@ -151,6 +151,56 @@ const ServiceHero = ({
             </section>
 
 
+            {/* Logo Marquee Section */}
+            {logos && logos.length > 0 && (
+                <div className="bg-white border-t border-gray-100 py-10 overflow-hidden relative z-10">
+                    <div className="max-w-7xl mx-auto px-6 mb-6 text-center">
+                        <p className="text-sm font-semibold text-gray-500 uppercase tracking-widest">Trusted by fast-growing companies</p>
+                    </div>
+
+                    <div className="flex w-full overflow-hidden mask-fade">
+                        <div className="flex animate-marquee gap-16 whitespace-nowrap px-8 items-center min-w-full">
+                            {/* Original Set */}
+                            {logos.map((logo, index) => (
+                                <img
+                                    key={`logo-1-${index}`}
+                                    src={logo}
+                                    alt="Client Logo"
+                                    className="h-8 md:h-10 w-auto opacity-40 hover:opacity-100 grayscale hover:grayscale-0 transition-all duration-300 object-contain"
+                                />
+                            ))}
+                            {/* Duplicate Set for Infinite Scroll */}
+                            {logos.map((logo, index) => (
+                                <img
+                                    key={`logo-2-${index}`}
+                                    src={logo}
+                                    alt="Client Logo"
+                                    className="h-8 md:h-10 w-auto opacity-40 hover:opacity-100 grayscale hover:grayscale-0 transition-all duration-300 object-contain"
+                                />
+                            ))}
+                            {/* Triplicate Set for Infinite Scroll to ensure width coverage on large screens */}
+                            {logos.map((logo, index) => (
+                                <img
+                                    key={`logo-3-${index}`}
+                                    src={logo}
+                                    alt="Client Logo"
+                                    className="h-8 md:h-10 w-auto opacity-40 hover:opacity-100 grayscale hover:grayscale-0 transition-all duration-300 object-contain"
+                                />
+                            ))}
+                            {/* Quadruplicate Set for wider screens if needed */}
+                            {logos.map((logo, index) => (
+                                <img
+                                    key={`logo-4-${index}`}
+                                    src={logo}
+                                    alt="Client Logo"
+                                    className="h-8 md:h-10 w-auto opacity-40 hover:opacity-100 grayscale hover:grayscale-0 transition-all duration-300 object-contain"
+                                />
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
+
         </>
     );
 };
