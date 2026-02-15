@@ -111,19 +111,26 @@
 @layer base {
   * {
     @apply border-border;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   html {
     scroll-behavior: smooth;
-  }
-
-  .transform-gpu {
-    transform: translateZ(0);
-    will-change: transform;
+    overflow-x: hidden;
   }
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
+    overflow-x: hidden;
+  }
+
+  /* GPU acceleration */
+  .transform-gpu {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+    will-change: transform;
   }
 }
 
@@ -334,5 +341,24 @@
 
   .preserve-3d {
     transform-style: preserve-3d;
+  }
+}
+
+/* Optimization Rules */
+@media (prefers-reduced-motion: no-preference) {
+  * {
+    scroll-behavior: smooth;
+  }
+}
+
+.smooth-transition {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@supports (overflow: clip) {
+  body {
+    overflow: clip;
+    overflow-x: clip;
+    overflow-y: auto;
   }
 }

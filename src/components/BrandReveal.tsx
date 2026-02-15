@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { ArrowDown } from 'lucide-react';
 
@@ -6,13 +6,36 @@ export default function BrandReveal() {
     const [showContent, setShowContent] = useState(false);
     const { scrollY } = useScroll();
 
-    // Brand screen fades out smoothly
-    const brandOpacity = useTransform(scrollY, [0, 400, 600], [1, 1, 0]);
-    const brandScale = useTransform(scrollY, [0, 600], [1, 0.95]);
+    // SMOOTHER scroll transforms with useSpring
+    const brandOpacityRaw = useTransform(scrollY, [0, 300, 500], [1, 1, 0]);
+    const brandScaleRaw = useTransform(scrollY, [0, 500], [1, 0.95]);
+    const heroOpacityRaw = useTransform(scrollY, [400, 600], [0, 1]);
+    const heroYRaw = useTransform(scrollY, [400, 600], [30, 0]);
 
-    // Hero appears immediately after brand
-    const heroOpacity = useTransform(scrollY, [500, 700], [0, 1]);
-    const heroY = useTransform(scrollY, [500, 700], [30, 0]);
+    // Add spring physics for ultra-smooth animations
+    const brandOpacity = useSpring(brandOpacityRaw, {
+        stiffness: 100,
+        damping: 30,
+        restDelta: 0.001
+    });
+
+    const brandScale = useSpring(brandScaleRaw, {
+        stiffness: 100,
+        damping: 30,
+        restDelta: 0.001
+    });
+
+    const heroOpacity = useSpring(heroOpacityRaw, {
+        stiffness: 100,
+        damping: 30,
+        restDelta: 0.001
+    });
+
+    const heroY = useSpring(heroYRaw, {
+        stiffness: 100,
+        damping: 30,
+        restDelta: 0.001
+    });
 
     useEffect(() => {
         const timer = setTimeout(() => setShowContent(true), 2000);
@@ -21,36 +44,46 @@ export default function BrandReveal() {
 
     return (
         <div className="relative">
-            {/* BRAND REVEAL - Fixed position, fades out on scroll */}
+            {/* BRAND REVEAL - Optimized */}
             <motion.section
                 className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden pointer-events-none"
                 style={{
                     opacity: brandOpacity,
                     scale: brandScale,
+                    willChange: 'opacity, transform'
                 }}
             >
                 {/* Emerald Background */}
                 <div className="absolute inset-0 bg-gradient-to-br from-emerald-400 via-emerald-500 to-emerald-600">
-                    {/* Animated Blob 1 */}
+                    {/* Blob 1 - Simplified animation */}
                     <motion.div
-                        className="absolute -top-20 -left-20 w-96 h-96 bg-emerald-300 rounded-full opacity-30 blur-3xl"
+                        className="absolute -top-20 -left-20 w-96 h-96 bg-emerald-300 rounded-full opacity-30 blur-3xl transform-gpu"
                         animate={{
-                            scale: [1, 1.2, 1],
-                            x: [0, 50, 0],
-                            y: [0, 30, 0],
+                            scale: [1, 1.1, 1],
                         }}
-                        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+                        transition={{
+                            duration: 10,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                            repeatType: "reverse"
+                        }}
+                        style={{ willChange: 'transform' }}
                     />
 
-                    {/* Animated Blob 2 */}
+                    {/* Blob 2 - Simplified animation */}
                     <motion.div
-                        className="absolute -bottom-32 -right-32 w-[500px] h-[500px] bg-emerald-300 rounded-full opacity-20 blur-3xl"
+                        className="absolute -bottom-32 -right-32 w-[500px] h-[500px] bg-emerald-300 rounded-full opacity-20 blur-3xl transform-gpu"
                         animate={{
-                            scale: [1, 1.3, 1],
-                            x: [0, -50, 0],
-                            y: [0, -30, 0],
+                            scale: [1, 1.15, 1],
                         }}
-                        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                        transition={{
+                            duration: 12,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                            delay: 1,
+                            repeatType: "reverse"
+                        }}
+                        style={{ willChange: 'transform' }}
                     />
                 </div>
 
@@ -114,18 +147,23 @@ export default function BrandReveal() {
             {/* SPACER - Provides scroll distance */}
             <div className="h-screen" />
 
-            {/* HERO SECTION - Appears after brand exits */}
+            {/* HERO SECTION - Optimized */}
             <motion.div
                 className="relative z-10"
                 style={{
                     opacity: heroOpacity,
                     y: heroY,
+                    willChange: 'opacity, transform'
                 }}
             >
-                {/* Navigation - Only shows with hero */}
+                {/* Navigation - Optimized */}
                 <motion.nav
-                    className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm shadow-sm"
-                    style={{ opacity: heroOpacity }}
+                    className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm shadow-sm transform-gpu"
+                    style={{
+                        opacity: heroOpacity,
+                        willChange: 'opacity'
+                    }}
+                    initial={false}
                 >
                     <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
                         {/* Logo */}
@@ -171,79 +209,100 @@ export default function BrandReveal() {
                     <div className="max-w-7xl mx-auto px-6 py-20 w-full">
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
-                            {/* LEFT - Orange Cards with Images */}
+                            {/* LEFT - Orange Cards with Optimized Animations */}
                             <motion.div
                                 className="relative order-2 lg:order-1"
                                 initial={{ opacity: 0, x: -100 }}
                                 whileInView={{ opacity: 1, x: 0 }}
-                                viewport={{ once: true, amount: 0.3 }}
-                                transition={{ duration: 1, delay: 0.2 }}
+                                viewport={{
+                                    once: true,
+                                    amount: 0.3,
+                                    margin: "0px 0px -100px 0px"
+                                }}
+                                transition={{
+                                    duration: 0.8,
+                                    delay: 0.2,
+                                    ease: [0.4, 0, 0.2, 1]
+                                }}
                             >
                                 <div className="relative w-full max-w-lg mx-auto lg:mx-0 h-[500px] flex items-center justify-center">
 
                                     {/* Card 1 - Top (Background card) */}
                                     <motion.div
-                                        className="absolute w-72 h-96 bg-gradient-to-br from-orange-400 to-orange-500 rounded-3xl shadow-2xl overflow-hidden"
+                                        className="absolute w-72 h-96 bg-gradient-to-br from-orange-400 to-orange-500 rounded-3xl shadow-xl overflow-hidden transform-gpu"
                                         style={{
                                             rotate: -8,
                                             top: '0%',
                                             left: '5%',
+                                            willChange: 'transform'
                                         }}
                                         animate={{
                                             rotate: [-8, -6, -8],
                                             y: [0, -8, 0],
                                         }}
-                                        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                                        transition={{
+                                            duration: 4,
+                                            repeat: Infinity,
+                                            ease: "easeInOut",
+                                            repeatType: "reverse"
+                                        }}
                                     >
-                                        {/* Image */}
                                         <img
                                             src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=400&h=600&fit=crop"
                                             alt="Social Media Content"
-                                            className="w-full h-full object-cover opacity-90"
+                                            className="w-full h-full object-cover opacity-90 transform-gpu"
+                                            loading="lazy"
+                                            decoding="async"
+                                            width="400"
+                                            height="600"
                                         />
 
-                                        {/* Gradient Overlay */}
                                         <div className="absolute inset-0 bg-gradient-to-t from-orange-600/50 to-transparent" />
 
-                                        {/* Badge */}
                                         <div className="absolute bottom-6 left-6 bg-gray-900/90 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
                                             @SM
                                         </div>
                                     </motion.div>
 
-                                    {/* Card 2 - Middle (Main/Front card) */}
+                                    {/* Card 2 - Middle (Main) */}
                                     <motion.div
-                                        className="relative w-72 h-96 bg-gradient-to-br from-orange-400 to-orange-500 rounded-3xl shadow-2xl overflow-hidden z-10"
+                                        className="relative w-72 h-96 bg-gradient-to-br from-orange-400 to-orange-500 rounded-3xl shadow-xl overflow-hidden z-10 transform-gpu"
                                         style={{
                                             rotate: -3,
+                                            willChange: 'transform'
                                         }}
                                         animate={{
                                             rotate: [-3, -1, -3],
                                             y: [0, -5, 0],
                                         }}
-                                        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                                        transition={{
+                                            duration: 5,
+                                            repeat: Infinity,
+                                            ease: "easeInOut",
+                                            repeatType: "reverse"
+                                        }}
                                     >
-                                        {/* Image */}
                                         <img
                                             src="https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=400&h=600&fit=crop"
                                             alt="Social Media Content"
-                                            className="w-full h-full object-cover"
+                                            className="w-full h-full object-cover transform-gpu"
+                                            loading="eager"
+                                            decoding="async"
+                                            width="400"
+                                            height="600"
+                                            fetchPriority="high"
                                         />
 
-                                        {/* Gradient Overlay for better text readability */}
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
 
-                                        {/* Top Badge */}
                                         <div className="absolute top-6 left-6 bg-gray-900/90 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
                                             Social Media Content
                                         </div>
 
-                                        {/* Bottom Badge */}
                                         <div className="absolute bottom-6 left-6 bg-gray-900/90 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
                                             @SM
                                         </div>
 
-                                        {/* Optional: Add engagement stats */}
                                         <div className="absolute bottom-6 right-6 flex flex-col items-end gap-2">
                                             <div className="bg-white/20 backdrop-blur-md text-white px-3 py-1 rounded-full text-xs font-bold">
                                                 ❤️ 2.5K
@@ -254,31 +313,38 @@ export default function BrandReveal() {
                                         </div>
                                     </motion.div>
 
-                                    {/* Card 3 - Bottom (Background card) */}
+                                    {/* Card 3 - Bottom */}
                                     <motion.div
-                                        className="absolute w-72 h-96 bg-gradient-to-br from-orange-400 to-orange-500 rounded-3xl shadow-2xl overflow-hidden"
+                                        className="absolute w-72 h-96 bg-gradient-to-br from-orange-400 to-orange-500 rounded-3xl shadow-xl overflow-hidden transform-gpu"
                                         style={{
                                             rotate: 5,
                                             bottom: '0%',
                                             right: '5%',
+                                            willChange: 'transform'
                                         }}
                                         animate={{
                                             rotate: [5, 7, 5],
                                             y: [0, 8, 0],
                                         }}
-                                        transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                                        transition={{
+                                            duration: 4.5,
+                                            repeat: Infinity,
+                                            ease: "easeInOut",
+                                            repeatType: "reverse"
+                                        }}
                                     >
-                                        {/* Image */}
                                         <img
                                             src="https://images.unsplash.com/photo-1611162618071-b39a2ec055fb?w=400&h=600&fit=crop"
                                             alt="Social Media Content"
-                                            className="w-full h-full object-cover opacity-90"
+                                            className="w-full h-full object-cover opacity-90 transform-gpu"
+                                            loading="lazy"
+                                            decoding="async"
+                                            width="400"
+                                            height="600"
                                         />
 
-                                        {/* Gradient Overlay */}
                                         <div className="absolute inset-0 bg-gradient-to-t from-orange-600/50 to-transparent" />
 
-                                        {/* Badge */}
                                         <div className="absolute bottom-6 left-6 bg-gray-900/90 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
                                             @SM
                                         </div>
@@ -292,8 +358,16 @@ export default function BrandReveal() {
                                 className="order-1 lg:order-2"
                                 initial={{ opacity: 0, x: 100 }}
                                 whileInView={{ opacity: 1, x: 0 }}
-                                viewport={{ once: true, amount: 0.3 }}
-                                transition={{ duration: 1, delay: 0.3 }}
+                                viewport={{
+                                    once: true,
+                                    amount: 0.3,
+                                    margin: "0px 0px -100px 0px"
+                                }}
+                                transition={{
+                                    duration: 0.8,
+                                    delay: 0.3,
+                                    ease: [0.4, 0, 0.2, 1]
+                                }}
                             >
                                 <h1 className="text-5xl md:text-6xl lg:text-7xl font-black leading-[1.1] mb-6">
                                     <span className="text-white block">VIDEOS</span>
