@@ -1,18 +1,25 @@
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ArrowDown } from 'lucide-react';
+import fanCard1 from '@/assets/images/fan-card-1.png';
+import fanCard2 from '@/assets/images/fan-card-2.png';
+import fanCard3 from '@/assets/images/fan-card-3.jpg';
 
 export default function BrandReveal() {
     const [showContent, setShowContent] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
+    const cardContainerRef = useRef(null);
+
     const { scrollY } = useScroll();
+    const { scrollYProgress } = useScroll({
+        target: cardContainerRef,
+        offset: ["start start", "end start"]
+    });
 
-    // SMOOTHER scroll transforms with useSpring
-    const brandOpacityRaw = useTransform(scrollY, [0, 300, 500], [1, 1, 0]);
-    const brandScaleRaw = useTransform(scrollY, [0, 500], [1, 0.95]);
-    const heroOpacityRaw = useTransform(scrollY, [400, 600], [0, 1]);
-    const heroYRaw = useTransform(scrollY, [400, 600], [30, 0]);
+    // Brand screen animations
+    const brandOpacityRaw = useTransform(scrollY, [0, 150, 250], [1, 1, 0]);
+    const brandScaleRaw = useTransform(scrollY, [0, 250], [1, 0.95]);
 
-    // Add spring physics for ultra-smooth animations
     const brandOpacity = useSpring(brandOpacityRaw, {
         stiffness: 100,
         damping: 30,
@@ -25,17 +32,80 @@ export default function BrandReveal() {
         restDelta: 0.001
     });
 
+    // Hero section animations
+    const heroOpacityRaw = useTransform(scrollY, [200, 350], [0, 1]);
+    const heroYRaw = useTransform(scrollY, [200, 350], [30, 0]);
+
     const heroOpacity = useSpring(heroOpacityRaw, {
         stiffness: 100,
-        damping: 30,
-        restDelta: 0.001
+        damping: 30
     });
 
     const heroY = useSpring(heroYRaw, {
         stiffness: 100,
-        damping: 30,
-        restDelta: 0.001
+        damping: 30
     });
+
+    // CARD FAN SCROLL PHYSICS
+    // As user scrolls, cards collapse from fan to stack
+    const cardCollapseProgress = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
+
+    // Parallax movement - cards move slower than content
+    const cardsY = useTransform(scrollYProgress, [0, 0.5], [0, -150]);
+    const cardsYSpring = useSpring(cardsY, {
+        stiffness: 300,
+        damping: 40
+    });
+
+    // Card definitions with scroll-responsive rotations
+    const cards = [
+        {
+            id: 1,
+            initialRotate: -20,
+            finalRotate: -4,
+            zIndex: 1,
+            xOffset: -40,
+            // Using custom imported image
+            image: fanCard1,
+            color: "from-orange-400 to-orange-500"
+        },
+        {
+            id: 2,
+            initialRotate: -10,
+            finalRotate: -2,
+            zIndex: 2,
+            xOffset: -20,
+            image: fanCard2,
+            color: "from-orange-500 to-orange-600"
+        },
+        {
+            id: 3,
+            initialRotate: 0,
+            finalRotate: 0,
+            zIndex: 3, // Highest - center card on top
+            xOffset: 0,
+            image: fanCard3,
+            color: "from-orange-400 to-orange-500"
+        },
+        {
+            id: 4,
+            initialRotate: 10,
+            finalRotate: 2,
+            zIndex: 2,
+            xOffset: 20,
+            image: fanCard2,
+            color: "from-orange-500 to-orange-600"
+        },
+        {
+            id: 5,
+            initialRotate: 20,
+            finalRotate: 4,
+            zIndex: 1,
+            xOffset: 40,
+            image: fanCard1,
+            color: "from-orange-400 to-orange-500"
+        }
+    ];
 
     useEffect(() => {
         const timer = setTimeout(() => setShowContent(true), 2000);
@@ -44,7 +114,7 @@ export default function BrandReveal() {
 
     return (
         <div className="relative">
-            {/* BRAND REVEAL - Optimized */}
+            {/* BRAND REVEAL - Same as before */}
             <motion.section
                 className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden pointer-events-none"
                 style={{
@@ -53,41 +123,22 @@ export default function BrandReveal() {
                     willChange: 'opacity, transform'
                 }}
             >
-                {/* Emerald Background */}
                 <div className="absolute inset-0 bg-gradient-to-br from-emerald-400 via-emerald-500 to-emerald-600">
-                    {/* Blob 1 - Simplified animation */}
                     <motion.div
                         className="absolute -top-20 -left-20 w-96 h-96 bg-emerald-300 rounded-full opacity-30 blur-3xl transform-gpu"
-                        animate={{
-                            scale: [1, 1.1, 1],
-                        }}
-                        transition={{
-                            duration: 10,
-                            repeat: Infinity,
-                            ease: "easeInOut",
-                            repeatType: "reverse"
-                        }}
+                        animate={{ scale: [1, 1.1, 1] }}
+                        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", repeatType: "reverse" }}
                         style={{ willChange: 'transform' }}
                     />
 
-                    {/* Blob 2 - Simplified animation */}
                     <motion.div
                         className="absolute -bottom-32 -right-32 w-[500px] h-[500px] bg-emerald-300 rounded-full opacity-20 blur-3xl transform-gpu"
-                        animate={{
-                            scale: [1, 1.15, 1],
-                        }}
-                        transition={{
-                            duration: 12,
-                            repeat: Infinity,
-                            ease: "easeInOut",
-                            delay: 1,
-                            repeatType: "reverse"
-                        }}
+                        animate={{ scale: [1, 1.15, 1] }}
+                        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 1, repeatType: "reverse" }}
                         style={{ willChange: 'transform' }}
                     />
                 </div>
 
-                {/* Logo Animation */}
                 <motion.div
                     className="relative z-10 text-center pointer-events-none"
                     initial={{ opacity: 0, scale: 0.5, y: 50 }}
@@ -122,7 +173,6 @@ export default function BrandReveal() {
                     </motion.p>
                 </motion.div>
 
-                {/* Scroll Indicator */}
                 {showContent && (
                     <motion.div
                         className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer pointer-events-auto"
@@ -144,11 +194,11 @@ export default function BrandReveal() {
                 )}
             </motion.section>
 
-            {/* SPACER - Provides scroll distance */}
-            <div className="h-screen" />
+            <div className="h-[50vh]" />
 
-            {/* HERO SECTION - Optimized */}
+            {/* HERO SECTION WITH SCROLL-RESPONSIVE CARD FAN */}
             <motion.div
+                ref={cardContainerRef}
                 className="relative z-10"
                 style={{
                     opacity: heroOpacity,
@@ -156,7 +206,6 @@ export default function BrandReveal() {
                     willChange: 'opacity, transform'
                 }}
             >
-                {/* Navigation - Optimized */}
                 <motion.nav
                     className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm shadow-sm transform-gpu"
                     style={{
@@ -166,21 +215,15 @@ export default function BrandReveal() {
                     initial={false}
                 >
                     <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-                        {/* Logo */}
                         <div className="text-2xl font-black">
                             <span className="text-emerald-500">Z</span>
                             <span className="text-gray-900">OR</span>
                             <span className="text-emerald-500">X</span>
                         </div>
 
-                        {/* Navigation Links */}
                         <div className="hidden md:flex items-center gap-8">
-                            <a href="#home" className="text-gray-900 font-medium hover:text-emerald-500 transition">
-                                Home
-                            </a>
-                            <a href="#about" className="text-gray-600 hover:text-emerald-500 transition">
-                                About Us
-                            </a>
+                            <a href="#home" className="text-gray-900 font-medium hover:text-emerald-500 transition">Home</a>
+                            <a href="#about" className="text-gray-600 hover:text-emerald-500 transition">About Us</a>
                             <div className="relative group">
                                 <button className="text-gray-600 hover:text-emerald-500 transition flex items-center gap-1">
                                     Services
@@ -189,185 +232,148 @@ export default function BrandReveal() {
                                     </svg>
                                 </button>
                             </div>
-                            <a href="#blogs" className="text-gray-600 hover:text-emerald-500 transition">
-                                Blogs
-                            </a>
-                            <a href="#contact" className="text-gray-600 hover:text-emerald-500 transition">
-                                Contact
-                            </a>
+                            <a href="#blogs" className="text-gray-600 hover:text-emerald-500 transition">Blogs</a>
+                            <a href="#contact" className="text-gray-600 hover:text-emerald-500 transition">Contact</a>
                         </div>
 
-                        {/* CTA Button */}
                         <button className="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-lg font-semibold transition shadow-lg shadow-emerald-500/30">
                             Get Started
                         </button>
                     </div>
                 </motion.nav>
 
-                {/* Hero Content */}
                 <section className="relative min-h-screen bg-[#1a2332] overflow-hidden flex items-center">
                     <div className="max-w-7xl mx-auto px-6 py-20 w-full">
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
-                            {/* LEFT - Orange Cards with Optimized Animations */}
+                            {/* LEFT - SCROLL-RESPONSIVE CARD FAN */}
                             <motion.div
                                 className="relative order-2 lg:order-1"
-                                initial={{ opacity: 0, x: -100 }}
-                                whileInView={{ opacity: 1, x: 0 }}
-                                viewport={{
-                                    once: true,
-                                    amount: 0.3,
-                                    margin: "0px 0px -100px 0px"
-                                }}
-                                transition={{
-                                    duration: 0.8,
-                                    delay: 0.2,
-                                    ease: [0.4, 0, 0.2, 1]
-                                }}
+                                style={{ y: cardsYSpring }}
+                                onHoverStart={() => setIsHovered(true)}
+                                onHoverEnd={() => setIsHovered(false)}
                             >
-                                <div className="relative w-full max-w-lg mx-auto lg:mx-0 h-[500px] flex items-center justify-center">
+                                <div className="relative w-full h-[550px] flex items-center justify-center">
 
-                                    {/* Card 1 - Top (Background card) */}
-                                    <motion.div
-                                        className="absolute w-72 h-96 bg-gradient-to-br from-orange-400 to-orange-500 rounded-3xl shadow-xl overflow-hidden transform-gpu"
-                                        style={{
-                                            rotate: -8,
-                                            top: '0%',
-                                            left: '5%',
-                                            willChange: 'transform'
-                                        }}
-                                        animate={{
-                                            rotate: [-8, -6, -8],
-                                            y: [0, -8, 0],
-                                        }}
-                                        transition={{
-                                            duration: 4,
-                                            repeat: Infinity,
-                                            ease: "easeInOut",
-                                            repeatType: "reverse"
-                                        }}
-                                    >
-                                        <img
-                                            src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=400&h=600&fit=crop"
-                                            alt="Social Media Content"
-                                            className="w-full h-full object-cover opacity-90 transform-gpu"
-                                            loading="lazy"
-                                            decoding="async"
-                                            width="400"
-                                            height="600"
-                                        />
+                                    {cards.map((card, index) => {
+                                        // Calculate rotation based on scroll progress
+                                        const rotateRaw = useTransform(
+                                            cardCollapseProgress,
+                                            [0, 1],
+                                            [
+                                                isHovered ? card.initialRotate * 1.3 : card.initialRotate, // Fan expands on hover
+                                                card.finalRotate // Collapses to near-vertical on scroll
+                                            ]
+                                        );
 
-                                        <div className="absolute inset-0 bg-gradient-to-t from-orange-600/50 to-transparent" />
+                                        const rotate = useSpring(rotateRaw, {
+                                            stiffness: 300,
+                                            damping: 40
+                                        });
 
-                                        <div className="absolute bottom-6 left-6 bg-gray-900/90 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
-                                            @SM
-                                        </div>
-                                    </motion.div>
+                                        // Horizontal spread collapse
+                                        const xRaw = useTransform(
+                                            cardCollapseProgress,
+                                            [0, 1],
+                                            [card.xOffset, card.xOffset * 0.2] // Collapses horizontally
+                                        );
 
-                                    {/* Card 2 - Middle (Main) */}
-                                    <motion.div
-                                        className="relative w-72 h-96 bg-gradient-to-br from-orange-400 to-orange-500 rounded-3xl shadow-xl overflow-hidden z-10 transform-gpu"
-                                        style={{
-                                            rotate: -3,
-                                            willChange: 'transform'
-                                        }}
-                                        animate={{
-                                            rotate: [-3, -1, -3],
-                                            y: [0, -5, 0],
-                                        }}
-                                        transition={{
-                                            duration: 5,
-                                            repeat: Infinity,
-                                            ease: "easeInOut",
-                                            repeatType: "reverse"
-                                        }}
-                                    >
-                                        <img
-                                            src="https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=400&h=600&fit=crop"
-                                            alt="Social Media Content"
-                                            className="w-full h-full object-cover transform-gpu"
-                                            loading="eager"
-                                            decoding="async"
-                                            width="400"
-                                            height="600"
-                                            fetchPriority="high"
-                                        />
+                                        const x = useSpring(xRaw, {
+                                            stiffness: 300,
+                                            damping: 40
+                                        });
 
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+                                        // Scale effect - center card stays full size
+                                        const scaleRaw = useTransform(
+                                            cardCollapseProgress,
+                                            [0, 1],
+                                            [1, card.id === 3 ? 1 : 0.95]
+                                        );
 
-                                        <div className="absolute top-6 left-6 bg-gray-900/90 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
-                                            Social Media Content
-                                        </div>
+                                        const scale = useSpring(scaleRaw, {
+                                            stiffness: 300,
+                                            damping: 40
+                                        });
 
-                                        <div className="absolute bottom-6 left-6 bg-gray-900/90 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
-                                            @SM
-                                        </div>
+                                        return (
+                                            <motion.div
+                                                key={card.id}
+                                                className="absolute w-72 h-96 transform-gpu"
+                                                style={{
+                                                    rotate,
+                                                    x,
+                                                    scale,
+                                                    zIndex: card.zIndex,
+                                                    transformOrigin: 'bottom center', // CRITICAL: Cards pivot from bottom
+                                                    willChange: 'transform'
+                                                }}
+                                            >
+                                                <div className={`w-full h-full bg-gradient-to-br ${card.color} rounded-3xl shadow-2xl overflow-hidden`}>
+                                                    {/* Image */}
+                                                    <img
+                                                        src={card.image}
+                                                        alt={`Social Media Content ${card.id}`}
+                                                        className="w-full h-full object-cover transform-gpu"
+                                                        loading={card.id === 3 ? "eager" : "lazy"}
+                                                        decoding="async"
+                                                    />
 
-                                        <div className="absolute bottom-6 right-6 flex flex-col items-end gap-2">
-                                            <div className="bg-white/20 backdrop-blur-md text-white px-3 py-1 rounded-full text-xs font-bold">
-                                                ❤️ 2.5K
-                                            </div>
-                                            <div className="bg-white/20 backdrop-blur-md text-white px-3 py-1 rounded-full text-xs font-bold">
-                                                💬 180
-                                            </div>
-                                        </div>
-                                    </motion.div>
+                                                    {/* Gradient Overlay */}
+                                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
 
-                                    {/* Card 3 - Bottom */}
-                                    <motion.div
-                                        className="absolute w-72 h-96 bg-gradient-to-br from-orange-400 to-orange-500 rounded-3xl shadow-xl overflow-hidden transform-gpu"
-                                        style={{
-                                            rotate: 5,
-                                            bottom: '0%',
-                                            right: '5%',
-                                            willChange: 'transform'
-                                        }}
-                                        animate={{
-                                            rotate: [5, 7, 5],
-                                            y: [0, 8, 0],
-                                        }}
-                                        transition={{
-                                            duration: 4.5,
-                                            repeat: Infinity,
-                                            ease: "easeInOut",
-                                            repeatType: "reverse"
-                                        }}
-                                    >
-                                        <img
-                                            src="https://images.unsplash.com/photo-1611162618071-b39a2ec055fb?w=400&h=600&fit=crop"
-                                            alt="Social Media Content"
-                                            className="w-full h-full object-cover opacity-90 transform-gpu"
-                                            loading="lazy"
-                                            decoding="async"
-                                            width="400"
-                                            height="600"
-                                        />
+                                                    {/* Content - Only show on center card or when fan is open */}
+                                                    <motion.div
+                                                        className="absolute inset-x-0 bottom-0 p-6"
+                                                        style={{
+                                                            opacity: useTransform(
+                                                                cardCollapseProgress,
+                                                                [0, 0.5],
+                                                                [1, card.id === 3 ? 1 : 0] // Only center card shows content when collapsed
+                                                            )
+                                                        }}
+                                                    >
+                                                        {card.id === 3 && (
+                                                            <div className="space-y-3">
+                                                                <div className="bg-gray-900/90 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-semibold inline-flex">
+                                                                    Social Media Content
+                                                                </div>
+                                                                <div className="flex items-center gap-3">
+                                                                    <div className="bg-gray-900/90 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-bold">
+                                                                        @SM
+                                                                    </div>
+                                                                    <div className="flex gap-2">
+                                                                        <div className="bg-white/20 backdrop-blur-md text-white px-3 py-1 rounded-full text-xs font-bold">
+                                                                            ❤️ 2.5K
+                                                                        </div>
+                                                                        <div className="bg-white/20 backdrop-blur-md text-white px-3 py-1 rounded-full text-xs font-bold">
+                                                                            💬 180
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        )}
 
-                                        <div className="absolute inset-0 bg-gradient-to-t from-orange-600/50 to-transparent" />
-
-                                        <div className="absolute bottom-6 left-6 bg-gray-900/90 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
-                                            @SM
-                                        </div>
-                                    </motion.div>
+                                                        {card.id !== 3 && (
+                                                            <div className="bg-gray-900/90 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-bold inline-flex">
+                                                                @SM
+                                                            </div>
+                                                        )}
+                                                    </motion.div>
+                                                </div>
+                                            </motion.div>
+                                        );
+                                    })}
 
                                 </div>
                             </motion.div>
 
-                            {/* RIGHT - Content */}
+                            {/* RIGHT - Content (same as before) */}
                             <motion.div
                                 className="order-1 lg:order-2"
                                 initial={{ opacity: 0, x: 100 }}
                                 whileInView={{ opacity: 1, x: 0 }}
-                                viewport={{
-                                    once: true,
-                                    amount: 0.3,
-                                    margin: "0px 0px -100px 0px"
-                                }}
-                                transition={{
-                                    duration: 0.8,
-                                    delay: 0.3,
-                                    ease: [0.4, 0, 0.2, 1]
-                                }}
+                                viewport={{ once: true, amount: 0.3, margin: "0px 0px -100px 0px" }}
+                                transition={{ duration: 0.8, delay: 0.3, ease: [0.4, 0, 0.2, 1] }}
                             >
                                 <h1 className="text-5xl md:text-6xl lg:text-7xl font-black leading-[1.1] mb-6">
                                     <span className="text-white block">VIDEOS</span>
@@ -377,13 +383,8 @@ export default function BrandReveal() {
                                         BRANDS
                                         <motion.div
                                             className="absolute -right-8 top-0 md:-right-12 md:-top-2 w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-red-500 to-red-600 shadow-2xl"
-                                            style={{
-                                                clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
-                                            }}
-                                            animate={{
-                                                rotate: [45, 55, 45],
-                                                scale: [1, 1.1, 1],
-                                            }}
+                                            style={{ clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)' }}
+                                            animate={{ rotate: [45, 55, 45], scale: [1, 1.1, 1] }}
                                             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                                         />
                                     </span>
@@ -395,7 +396,7 @@ export default function BrandReveal() {
 
                                 <div className="flex flex-wrap gap-4">
                                     <motion.button
-                                        className="bg-yellow-500 hover:bg-yellow-400 text-gray-900 px-8 py-4 rounded-full font-bold text-lg inline-flex items-center gap-3 shadow-2xl shadow-yellow-500/30 transition-all"
+                                        className="bg-yellow-500 hover:bg-yellow-400 text-gray-900 px-8 py-4 rounded-full font-bold text-lg inline-flex items-center gap-3 shadow-xl transition-all"
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
                                     >
@@ -420,7 +421,6 @@ export default function BrandReveal() {
                         </div>
                     </div>
 
-                    {/* Background Decoration */}
                     <div className="absolute top-1/4 right-0 w-96 h-96 bg-orange-500/5 rounded-full blur-3xl" />
                     <div className="absolute bottom-1/4 left-0 w-96 h-96 bg-yellow-500/5 rounded-full blur-3xl" />
                 </section>
