@@ -9,7 +9,8 @@
     /* Set default to White (Light Theme) */
     --background: 0 0% 100%;
     /* White */
-    --foreground: 0 0% 0%; /* Black */
+    --foreground: 0 0% 0%;
+    /* Black */
 
     --card: 0 0% 100%;
     /* White for cards */
@@ -18,14 +19,16 @@
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 0%;
 
-    --primary: 150 100% 40%; /* Slightly darker green for visibility on white */
+    --primary: 150 100% 40%;
+    /* Slightly darker green for visibility on white */
     /* Vibrant Green */
     --primary-foreground: 0 0% 100%;
     /* White text on green */
     --primary-light: 150 80% 40%;
     --primary-glow: 150 100% 40%;
 
-    --secondary: 0 0% 96%; /* Light gray for secondary */
+    --secondary: 0 0% 96%;
+    /* Light gray for secondary */
     /* Light Secondary */
     --secondary-foreground: 0 0% 0%;
     /* Black text on secondary */
@@ -252,6 +255,7 @@
 
   .animate-marquee {
     animation: marquee 30s linear infinite;
+    will-change: transform;
   }
 
   .animate-marquee:hover {

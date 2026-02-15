@@ -1,114 +1,151 @@
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { CheckCircle2, ArrowRight, Shield, Zap } from "lucide-react";
+import { TrendingUp, ArrowRight, Play, CheckCircle2, Shield, Lock } from "lucide-react";
+
+interface Stat {
+    value: string;
+    label: string;
+}
 
 interface ServiceHeroProps {
-    headline: string;
-    subheadline: string;
+    badge: string;
+    title: string;
+    subtitle: string;
+    description: string;
+    stats: Stat[];
     formTitle?: string;
-    backgroundImage?: string;
-    trustIndicators?: Array<{ icon: React.ElementType; text: string }>;
+    formSubtitle?: string;
 }
 
 const ServiceHero = ({
-    headline,
-    subheadline,
-    formTitle = "Get a Free Proposal",
-    backgroundImage = "https://images.unsplash.com/photo-1451187534959-52561c7d3b6e?q=80&w=1200",
-    trustIndicators = [
-        { icon: Shield, text: "Enterprise Security" },
-        { icon: Zap, text: "Fast Turnaround" }
-    ]
+    badge,
+    title,
+    subtitle,
+    description,
+    stats,
+    formTitle = "Book Your Free SEO Audit",
+    formSubtitle = "Get a custom roadmap to dominate your market"
 }: ServiceHeroProps) => {
     return (
-        <section className="relative pt-24 pb-12 lg:pt-32 lg:pb-24 overflow-hidden bg-[#050505] text-white">
-            {/* Dynamic Background Elements */}
-            <div className="absolute inset-0 z-0">
-                <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-purple-500/10 rounded-full blur-[120px] animate-pulse" />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-500/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '2s' }} />
-                <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-[0.03]" />
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#050505]/50 to-[#050505]" />
-            </div>
+        <section className="bg-gradient-to-br from-white to-gray-50 py-20 md:py-32 overflow-hidden">
+            <div className="max-w-7xl mx-auto px-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
-            <div className="section-container relative z-10">
-                <div className="grid lg:grid-cols-2 gap-12 items-center">
-                    {/* Left Content */}
-                    <div className="text-center lg:text-left space-y-8">
-                        <h1 className="heading-display text-white animate-fade-up delay-100 opacity-0 mb-6 leading-tight" style={{ animationFillMode: 'forwards' }}>
-                            <span dangerouslySetInnerHTML={{ __html: headline }} />
+                    {/* LEFT - Content */}
+                    <div className="max-w-xl mx-auto lg:mx-0 text-center lg:text-left">
+                        {/* Top Badge */}
+                        <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-700 px-4 py-2 rounded-full text-sm font-semibold mb-6">
+                            <TrendingUp className="w-4 h-4" />
+                            {badge}
+                        </div>
+
+                        {/* Headlines */}
+                        <h1 className="text-5xl md:text-6xl font-black text-gray-900 leading-tight mb-4">
+                            {title}
                         </h1>
-
-                        <p className="text-xl text-gray-300 animate-fade-up delay-200 opacity-0 max-w-xl mx-auto lg:mx-0 leading-relaxed" style={{ animationFillMode: 'forwards' }}>
-                            {subheadline}
+                        <p className="text-3xl md:text-4xl font-bold text-emerald-600 mb-6">
+                            {subtitle}
                         </p>
 
-                        <div className="flex flex-wrap gap-4 animate-fade-up delay-300 opacity-0 justify-center lg:justify-start mt-8" style={{ animationFillMode: 'forwards' }}>
-                            {trustIndicators.map((indicator, index) => (
-                                <div key={index} className="flex items-center gap-2 text-white font-medium bg-white/5 backdrop-blur-md px-5 py-3 rounded-full border border-white/10 hover:bg-white/10 transition-colors">
-                                    <indicator.icon className="w-5 h-5 text-blue-400" />
-                                    <span>{indicator.text}</span>
+                        {/* Description */}
+                        <p className="text-lg text-gray-600 leading-relaxed mb-8 max-w-xl mx-auto lg:mx-0">
+                            {description}
+                        </p>
+
+                        {/* Trust Indicators (Stats) */}
+                        <div className="flex flex-wrap gap-6 mb-8 justify-center lg:justify-start">
+                            {stats.map((stat, index) => (
+                                <div key={index} className="text-center lg:text-left">
+                                    <div className="text-2xl font-bold text-emerald-600">{stat.value}</div>
+                                    <div className="text-sm text-gray-600 font-medium">{stat.label}</div>
                                 </div>
                             ))}
                         </div>
+
+                        {/* CTA Buttons */}
+                        <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
+                            <Button
+                                className="bg-emerald-500 hover:bg-emerald-600 text-white px-8 py-6 rounded-lg font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/50 inline-flex items-center gap-2 h-auto text-base"
+                            >
+                                Get Your Free SEO Audit
+                                <ArrowRight className="w-5 h-5" />
+                            </Button>
+                            <Button
+                                variant="outline"
+                                className="bg-white hover:bg-gray-50 text-gray-800 px-8 py-6 rounded-lg font-semibold border-2 border-gray-200 hover:border-emerald-500 transition-all inline-flex items-center gap-2 h-auto text-base"
+                            >
+                                <Play className="w-5 h-5 fill-current" />
+                                See How It Works
+                            </Button>
+                        </div>
                     </div>
 
-                    {/* Right Form - Glassmorphism */}
-                    <div className="lg:w-full max-w-md mx-auto lg:ml-auto animate-fade-left delay-300 opacity-0" style={{ animationFillMode: 'forwards' }}>
-                        <div className="bg-white/5 backdrop-blur-xl p-8 rounded-3xl shadow-2xl border border-white/10 relative overflow-hidden">
-                            {/* Glass reflection */}
-                            <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-50 pointer-events-none" />
+                    {/* RIGHT - Form */}
+                    <div className="max-w-lg mx-auto lg:mx-0 w-full animate-fade-up delay-200">
+                        <div className="bg-white border-2 border-gray-100 shadow-2xl shadow-gray-900/5 rounded-2xl p-8 md:p-10">
+                            <div className="mb-8">
+                                <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">{formTitle}</h3>
+                                <p className="text-sm text-gray-600">{formSubtitle}</p>
+                            </div>
 
-                            <div className="relative z-10">
-                                <div className="mb-6">
-                                    <h3 className="text-2xl font-bold text-white mb-2">{formTitle}</h3>
-                                    <p className="text-gray-400 text-sm">Fill out the form below for a free consultation.</p>
+                            <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+                                <div>
+                                    <label htmlFor="name" className="text-sm font-semibold text-gray-700 mb-2 block">Name</label>
+                                    <Input
+                                        id="name"
+                                        placeholder="John Doe"
+                                        className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all outline-none text-gray-900 placeholder-gray-400 h-auto"
+                                        required
+                                    />
                                 </div>
 
-                                <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div className="space-y-2">
-                                            <label htmlFor="name" className="text-xs font-medium text-gray-300 uppercase tracking-wider">Name</label>
-                                            <Input
-                                                id="name"
-                                                placeholder="John Doe"
-                                                className="bg-black/20 border-white/10 text-white placeholder:text-gray-600 focus:border-blue-500 focus:ring-blue-500/20"
-                                            />
-                                        </div>
-                                        <div className="space-y-2">
-                                            <label htmlFor="phone" className="text-xs font-medium text-gray-300 uppercase tracking-wider">Phone</label>
-                                            <Input
-                                                id="phone"
-                                                placeholder="+971..."
-                                                className="bg-black/20 border-white/10 text-white placeholder:text-gray-600 focus:border-blue-500 focus:ring-blue-500/20"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="space-y-2">
-                                        <label htmlFor="email" className="text-xs font-medium text-gray-300 uppercase tracking-wider">Email</label>
-                                        <Input
-                                            id="email"
-                                            type="email"
-                                            placeholder="john@example.com"
-                                            className="bg-black/20 border-white/10 text-white placeholder:text-gray-600 focus:border-blue-500 focus:ring-blue-500/20"
-                                        />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <label htmlFor="message" className="text-xs font-medium text-gray-300 uppercase tracking-wider">Project Details</label>
-                                        <Textarea
-                                            id="message"
-                                            placeholder="Tell us about your project..."
-                                            className="bg-black/20 border-white/10 text-white placeholder:text-gray-600 focus:border-blue-500 focus:ring-blue-500/20 min-h-[100px]"
-                                        />
-                                    </div>
-                                    <Button type="submit" className="w-full text-lg h-12 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 border-0 shadow-lg shadow-purple-900/20">
-                                        Get Free Audit
-                                    </Button>
-                                </form>
+                                <div>
+                                    <label htmlFor="phone" className="text-sm font-semibold text-gray-700 mb-2 block">Phone</label>
+                                    <Input
+                                        id="phone"
+                                        type="tel"
+                                        placeholder="+971..."
+                                        className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all outline-none text-gray-900 placeholder-gray-400 h-auto"
+                                        required
+                                    />
+                                </div>
+
+                                <div>
+                                    <label htmlFor="email" className="text-sm font-semibold text-gray-700 mb-2 block">Email</label>
+                                    <Input
+                                        id="email"
+                                        type="email"
+                                        placeholder="john@company.com"
+                                        className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all outline-none text-gray-900 placeholder-gray-400 h-auto"
+                                        required
+                                    />
+                                </div>
+
+                                <div className="mb-2">
+                                    <label htmlFor="website" className="text-sm font-semibold text-gray-700 mb-2 block">Website URL</label>
+                                    <Input
+                                        id="website"
+                                        type="url"
+                                        placeholder="www.yourcompany.com"
+                                        className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all outline-none text-gray-900 placeholder-gray-400 h-auto"
+                                        required
+                                    />
+                                </div>
+
+                                <Button type="submit" className="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-6 rounded-lg font-bold text-lg transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/50 mt-6 h-auto">
+                                    Get My Free SEO Audit
+                                </Button>
+                            </form>
+
+                            <div className="mt-6 pt-6 border-t border-gray-100 text-center">
+                                <p className="text-xs text-gray-500 flex items-center justify-center gap-1.5">
+                                    <Lock className="w-3 h-3" />
+                                    Your information is 100% secure. No spam, ever.
+                                </p>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </section>

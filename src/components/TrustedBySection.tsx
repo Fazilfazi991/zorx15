@@ -51,6 +51,10 @@ const TrustedBySection = () => {
                                 <img
                                     src={logo}
                                     alt="Client Logo"
+                                    loading="lazy"
+                                    decoding="async"
+                                    width="160"
+                                    height="64"
                                     className="max-h-12 md:max-h-16 w-auto object-contain"
                                 />
                             </div>

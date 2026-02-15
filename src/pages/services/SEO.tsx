@@ -1,7 +1,7 @@
 
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import AdvancedHero from "@/components/services/advanced/AdvancedHero";
+import ServiceHero from "@/components/services/ServiceHero";
 import AdvancedTrustBar from "@/components/services/advanced/AdvancedTrustBar";
 import BrutalTruth from "@/components/services/advanced/BrutalTruth";
 import ProcessFramework from "@/components/services/advanced/ProcessFramework";
@@ -20,12 +20,16 @@ const SEO = () => {
         <div className="min-h-screen bg-background font-sans">
             <Navbar />
             <main>
-                <AdvancedHero
-                    preHeadline="For Businesses Serious About Growth"
-                    headline="Dominate Google Rankings <span class='text-blue-500'>Without Wasting $50K</span> on Agencies That Deliver Nothing"
-                    subheadline="Our data-driven SEO system has generated 847M+ organic impressions for clients in 47 industries. Average ROI: 312% in 6 months."
-                    primaryCtaText="Get Your Free Strategy Session"
-                    backgroundImage="https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&q=80"
+                <ServiceHero
+                    badge="SEO Services"
+                    title="Dominate Google Rankings"
+                    subtitle="Without Wasting $50K on Agencies"
+                    description="Our proven SEO system has generated 847M+ organic impressions for clients across 47 industries. Average ROI: 312% in 6 months."
+                    stats={[
+                        { value: "847M+", label: "Impressions" },
+                        { value: "47", label: "Industries" },
+                        { value: "312%", label: "Avg ROI" }
+                    ]}
                 />
 
                 <AdvancedTrustBar />
