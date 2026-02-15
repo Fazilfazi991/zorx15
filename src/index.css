@@ -117,6 +117,11 @@
     scroll-behavior: smooth;
   }
 
+  .transform-gpu {
+    transform: translateZ(0);
+    will-change: transform;
+  }
+
   body {
     @apply bg-background text-foreground font-sans antialiased;
   }
@@ -260,5 +265,74 @@
 
   .animate-marquee:hover {
     animation-play-state: paused;
+  }
+
+  /* Gooey Effect Utilities */
+  .gooey-container {
+    filter: url(#gooey);
+  }
+
+  .gooey-hero-container {
+    filter: url(#gooey-hero);
+  }
+
+  /* Blobs for Hero Background */
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    animation: blob-bounce 10s infinite ease-in-out alternate;
+  }
+
+  .blob:nth-child(1) {
+    animation-delay: 0s;
+  }
+
+  .blob:nth-child(2) {
+    animation-delay: -2s;
+  }
+
+  .blob:nth-child(3) {
+    animation-delay: -4s;
+  }
+
+  @keyframes blob-bounce {
+    0% {
+      transform: translate(0, 0) scale(1);
+    }
+
+    33% {
+      transform: translate(30px, -50px) scale(1.1);
+    }
+
+    66% {
+      transform: translate(-20px, 20px) scale(0.9);
+    }
+
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
+  }
+
+  /* Staggered Text Reveal */
+  .reveal-text span {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: revealChar 0.5s cubic-bezier(0.5, 0, 0, 1) forwards;
+  }
+
+  @keyframes revealChar {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Magnetic/Tilt Effects */
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .preserve-3d {
+    transform-style: preserve-3d;
   }
 }

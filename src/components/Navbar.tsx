@@ -59,8 +59,8 @@ const Navbar = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-        ? "bg-background/95 backdrop-blur-md shadow-sm"
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out ${isScrolled
+        ? "bg-white/80 backdrop-blur-md shadow-sm border-b border-white/20"
         : "bg-transparent"
         }`}
     >
@@ -72,17 +72,19 @@ const Navbar = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => (
               link.children ? (
                 <DropdownMenu key={link.label}>
-                  <DropdownMenuTrigger className="flex items-center gap-1 text-foreground hover:text-emerald-500 font-medium transition-colors duration-200 outline-none">
-                    {link.label} <ChevronDown className="w-4 h-4" />
+                  <DropdownMenuTrigger className="relative px-4 py-2 text-foreground/80 hover:text-emerald-600 font-medium transition-colors duration-200 outline-none group rounded-full hover:bg-emerald-50/50">
+                    <span className="flex items-center gap-1">
+                      {link.label} <ChevronDown className="w-4 h-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+                    </span>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent>
+                  <DropdownMenuContent className="w-56 bg-white/90 backdrop-blur-xl border-emerald-100 p-2 animate-scale-in">
                     {link.children.map((child) => (
-                      <DropdownMenuItem key={child.label} asChild>
-                        <Link to={child.href || "#"} className="w-full cursor-pointer">
+                      <DropdownMenuItem key={child.label} asChild className="focus:bg-emerald-50 focus:text-emerald-700 cursor-pointer rounded-md">
+                        <Link to={child.href || "#"} className="w-full">
                           {child.label}
                         </Link>
                       </DropdownMenuItem>
@@ -94,7 +96,7 @@ const Navbar = () => {
                   <Link
                     key={link.label}
                     to={link.href || "#"}
-                    className="text-foreground hover:text-emerald-500 font-medium transition-colors duration-200"
+                    className="relative px-4 py-2 text-foreground/80 hover:text-emerald-600 font-medium transition-colors duration-200 rounded-full hover:bg-emerald-50/50"
                   >
                     {link.label}
                   </Link>
@@ -102,7 +104,7 @@ const Navbar = () => {
                   <a
                     key={link.label}
                     href={link.href}
-                    className="text-foreground hover:text-emerald-500 font-medium transition-colors duration-200"
+                    className="relative px-4 py-2 text-foreground/80 hover:text-emerald-600 font-medium transition-colors duration-200 rounded-full hover:bg-emerald-50/50"
                   >
                     {link.label}
                   </a>
