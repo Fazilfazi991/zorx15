@@ -1,6 +1,7 @@
 
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { TrendingUp } from "lucide-react";
 import ServiceHero from "@/components/services/ServiceHero";
 import AdvancedTrustBar from "@/components/services/advanced/AdvancedTrustBar";
 import BrutalTruth from "@/components/services/advanced/BrutalTruth";
@@ -14,6 +15,7 @@ import TechStack from "@/components/services/TechStack";
 import RelatedServices from "@/components/services/RelatedServices";
 import StickyCTA from "@/components/services/advanced/StickyCTA";
 import ExitIntentPopup from "@/components/services/advanced/ExitIntentPopup";
+import { Users, Target, DollarSign, Eye } from "lucide-react";
 
 const SEO = () => {
     return (
@@ -26,9 +28,16 @@ const SEO = () => {
                     subtitle="Without Wasting $50K on Agencies"
                     description="Our proven SEO system has generated 847M+ organic impressions for clients across 47 industries. Average ROI: 312% in 6 months."
                     stats={[
-                        { value: "847M+", label: "Impressions" },
-                        { value: "47", label: "Industries" },
-                        { value: "312%", label: "Avg ROI" }
+                        { value: "847M+", label: "Impressions", icon: Eye },
+                        { value: "47", label: "Industries", icon: Users },
+                        { value: "312%", label: "Avg ROI", icon: TrendingUp }
+                    ]}
+                    logos={[
+                        "https://logo.clearbit.com/google.com",
+                        "https://logo.clearbit.com/shopify.com",
+                        "https://logo.clearbit.com/hubspot.com",
+                        "https://logo.clearbit.com/salesforce.com",
+                        "https://logo.clearbit.com/monday.com"
                     ]}
                 />
 
