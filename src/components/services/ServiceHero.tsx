@@ -36,10 +36,10 @@ const ServiceHero = ({
                 <div className="absolute top-1/4 left-0 w-[800px] h-[800px] bg-gradient-to-br from-emerald-200 to-emerald-50 rounded-full blur-3xl opacity-10 -z-10 pointer-events-none" />
 
                 <div className="max-w-7xl mx-auto px-6">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
 
                         {/* LEFT - Content */}
-                        <div className="max-w-xl mx-auto lg:mx-0 text-center lg:text-left relative z-10">
+                        <div className="max-w-xl mx-auto lg:mx-0 text-center lg:text-left relative z-10 pt-0 mt-0">
                             {/* Top Badge */}
                             <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-700 px-4 py-2 rounded-full text-sm font-semibold mb-6">
                                 <TrendingUp className="w-4 h-4" />
@@ -78,7 +78,7 @@ const ServiceHero = ({
                         </div>
 
                         {/* RIGHT - Form */}
-                        <div className="max-w-md mx-auto lg:mx-0 w-full animate-fade-up delay-200 relative z-20">
+                        <div className="max-w-md mx-auto lg:mx-0 w-full animate-fade-up delay-200 relative z-20 pt-0 mt-0">
                             <div className="bg-white border border-gray-100 shadow-xl shadow-gray-900/5 rounded-2xl p-8 md:p-10">
                                 <div className="mb-8">
                                     <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">{formTitle}</h3>
@@ -153,7 +153,7 @@ const ServiceHero = ({
             {/* Stats & Logos Section */}
             <div className="bg-gray-50 py-12 border-t border-gray-100">
                 <div className="max-w-7xl mx-auto px-6">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-12 md:gap-16 items-center justify-center mb-16">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-12 md:gap-16 items-center justify-center mb-0">
                         {stats.map((stat, index) => (
                             <div key={index} className="text-center">
                                 <div className="flex justify-center mb-4">
@@ -164,18 +164,6 @@ const ServiceHero = ({
                             </div>
                         ))}
                     </div>
-                    {logos && logos.length > 0 && (
-                        <div className="flex flex-wrap justify-center items-center gap-12 md:gap-16 opacity-50 hover:opacity-100 transition-opacity duration-300">
-                            {logos.map((logo, index) => (
-                                <img
-                                    key={index}
-                                    src={logo}
-                                    alt="Client Logo"
-                                    className="h-8 md:h-10 w-auto grayscale hover:grayscale-0 transition-all duration-300"
-                                />
-                            ))}
-                        </div>
-                    )}
                 </div>
             </div>
         </>
