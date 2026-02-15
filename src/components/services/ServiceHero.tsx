@@ -150,22 +150,7 @@ const ServiceHero = ({
                 </div>
             </section>
 
-            {/* Stats & Logos Section */}
-            <div className="bg-gray-50 py-12 border-t border-gray-100">
-                <div className="max-w-7xl mx-auto px-6">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-12 md:gap-16 items-center justify-center mb-0">
-                        {stats.map((stat, index) => (
-                            <div key={index} className="text-center">
-                                <div className="flex justify-center mb-4">
-                                    {stat.icon && <stat.icon className="w-8 h-8 text-emerald-500" />}
-                                </div>
-                                <div className="text-4xl md:text-5xl font-black text-gray-900 mb-2">{stat.value}</div>
-                                <div className="text-sm text-gray-600 font-medium uppercase tracking-wider">{stat.label}</div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </div>
+
         </>
     );
 };
